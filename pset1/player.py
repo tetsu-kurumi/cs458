@@ -141,9 +141,10 @@ class Player:
             sim_num_matrix[hand_sum] = dict_by_sum
 
         num_of_cards_list = [7, 6, 5, 4, 3, 2]
+        
         # divide up the trials into num_of_cards_list
         for num_of_cards in num_of_cards_list:
-            for _ in range(trials): #(round(trials * (num_of_cards/27))):
+            for _ in range(round(trials * (num_of_cards/27))): #while i < (round((trials/num_of_cards) * 2)): #:
                 dealerhand = Hand()
                 playerhand = Hand()
                 deck = Deck()
@@ -180,14 +181,16 @@ class Player:
                         percentage_matrix[hand_sum][num_of_cards][face_card_rank] = result
                         sim_num_matrix[hand_sum][num_of_cards][face_card_rank] += 1
                     else:
-                        # sim_num_matrix[hand_sum][num_of_cards][face_card_rank] += 1
                         # Update the value in the percentage matrix (take the average)
                         curr_percentage = percentage_matrix[hand_sum][num_of_cards][face_card_rank] 
                         num = sim_num_matrix[hand_sum][num_of_cards][face_card_rank]
                         updated_result = (((curr_percentage[0] * num) + result[0])/(num+1), ((curr_percentage[1] * num) + result[1])/(num+1))
                         percentage_matrix[hand_sum][num_of_cards][face_card_rank] = updated_result
                         sim_num_matrix[hand_sum][num_of_cards][face_card_rank] += 1
-        
+                    # i += 1
+
+        # higher_ranks = ('A', '7', '8', '9', 'T', 'J', 'Q', 'K')
+        # lower_ranks = ('2', '3', '4', '5', '6')
         # print("percentage_matrix:\n", percentage_matrix)
         # Create boolean matrix based on percentage matrix
         for sum in self.desired_sum:
@@ -196,11 +199,22 @@ class Player:
                 dict_by_num_of_cards = {}
                 for face_card_rank in RANKS:
                     percentages = percentage_matrix[sum][num_of_cards][face_card_rank]
-                    # If the win percentages are not calculated, default to False
-                    # (since the unfilled parts are mostly the higher num_of_cards parts,
-                    #   which tend to be higher in number)
+                    # Set boolean randomly if not defined
                     if percentages is None:
                         dict_by_num_of_cards[face_card_rank] = False
+                        # randnum = random.random()
+                        # # hit more if it's 7-A
+                        # if face_card_rank in higher_ranks:
+                        #     if randnum > 0.8:
+                        #         dict_by_num_of_cards[face_card_rank] = False
+                        #     else:
+                        #         dict_by_num_of_cards[face_card_rank] = True
+                        # # stand more if it's 2-6
+                        # if face_card_rank in lower_ranks:
+                        #     if randnum > 0.8:
+                        #         dict_by_num_of_cards[face_card_rank] = True
+                        #     else:
+                        #         dict_by_num_of_cards[face_card_rank] = False
                     else:
                         stand_win_percentage = percentages[0]
                         hit_win_percentage = percentages[1]
@@ -354,10 +368,9 @@ class Player:
 
 def main():
     score = []
-    sim_num = 10000000
+    sim_num = 100000
     play_num = 100000
     cpu_time = []
-    # num_of_cards_averages = []
     for i in range (1):
         player = Player()
 
@@ -380,4 +393,4 @@ if __name__ == "__main__":
     main()
 
 # TODO:
-# - why is there (0, 0) in the matrix
+# - Can I increase the win percentage

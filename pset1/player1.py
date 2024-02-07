@@ -142,7 +142,7 @@ class Player:
 
         num_of_cards_list = [5, 4, 3, 2]
         # divide up the trials into num_of_cards_list
-        for desired_sum in self.desired_sum:
+        for num_of_cards in num_of_cards_list:
             for _ in range(trials): #while i < (round((trials/num_of_cards) * 2)): #(round(trials * (num_of_cards/27))):
                 dealerhand = Hand()
                 playerhand = Hand()
@@ -154,7 +154,7 @@ class Player:
                     playerhand.add_card(deck.deal_card())
 
                 hand_sum = playerhand.get_value()
-                if hand_sum == desired_sum:
+                if hand_sum in self.desired_sum:
                     # Deal card for dealer's facecard
                     face_card = deck.deal_card()
                     face_card_rank = face_card.get_rank()
@@ -188,8 +188,8 @@ class Player:
                         sim_num_matrix[hand_sum][num_of_cards][face_card_rank] += 1
                     # i += 1
 
-        # higher_ranks = ('A', '7', '8', '9', 'T', 'J', 'Q', 'K')
-        # lower_ranks = ('2', '3', '4', '5', '6')
+        higher_ranks = ('A', '7', '8', '9', 'T', 'J', 'Q', 'K')
+        lower_ranks = ('2', '3', '4', '5', '6')
         # print("percentage_matrix:\n", percentage_matrix)
         # Create boolean matrix based on percentage matrix
         for sum in self.desired_sum:
@@ -200,20 +200,20 @@ class Player:
                     percentages = percentage_matrix[sum][num_of_cards][face_card_rank]
                     # Set boolean randomly if not defined
                     if percentages is None:
-                        dict_by_num_of_cards[face_card_rank] = False
-                        # randnum = random.random()
+                        # dict_by_num_of_cards[face_card_rank] = False
+                        randnum = random.random()
                         # hit more if it's 7-A
-                        # if face_card_rank in higher_ranks:
-                        #     if randnum > 0.8:
-                        #         dict_by_num_of_cards[face_card_rank] = False
-                        #     else:
-                        #         dict_by_num_of_cards[face_card_rank] = True
-                        # # stand more if it's 2-6
-                        # if face_card_rank in lower_ranks:
-                        #     if randnum > 0.8:
-                        #         dict_by_num_of_cards[face_card_rank] = True
-                        #     else:
-                        #         dict_by_num_of_cards[face_card_rank] = False
+                        if face_card_rank in higher_ranks:
+                            if randnum > 0.8:
+                                dict_by_num_of_cards[face_card_rank] = False
+                            else:
+                                dict_by_num_of_cards[face_card_rank] = True
+                        # stand more if it's 2-6
+                        if face_card_rank in lower_ranks:
+                            if randnum > 0.8:
+                                dict_by_num_of_cards[face_card_rank] = True
+                            else:
+                                dict_by_num_of_cards[face_card_rank] = False
                     else:
                         stand_win_percentage = percentages[0]
                         hit_win_percentage = percentages[1]
@@ -224,7 +224,8 @@ class Player:
                 dict_by_sum[num_of_cards] = dict_by_num_of_cards
             self.matrix[sum] = dict_by_sum
 
-        # print("self.matrix:\n", self.matrix)
+        for 
+        print("self.matrix:\n", self.matrix)
 
     def do_stand(self, dealerhand, playerhand):
         player_value = playerhand.get_value()
@@ -245,7 +246,7 @@ class Player:
                 return 1, 0
         else:
             # Look up if the scenario already exists in matrix
-            if num_of_cards <= 6:
+            if num_of_cards <= 4:
                 current_strat = percentage_matrix[current_hand_sum][num_of_cards + 1][face_card_rank]
                 if current_strat is None:
                     # Fall back to default strat of hitting until sum reaches 17
@@ -305,7 +306,7 @@ class Player:
         current_value = playerhand.get_value()
 
         # If num of cards is 8 or more, resort to default strategy
-        if num_of_cards >= 8:
+        if num_of_cards >= 6:
             if current_value < self.defaut_strat:
                 return True
             else:
@@ -372,7 +373,7 @@ def main():
     sim_num = 100000
     play_num = 100000
     cpu_time = []
-    for i in range (100):
+    for i in range (10):
         player = Player()
 
         # Record the starting CPU time
