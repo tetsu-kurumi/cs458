@@ -93,7 +93,7 @@ class Player:
     def __init__(self):
         self.matrix = {}
         self.desired_sum = [12, 13, 14, 15, 16, 17, 18, 19, 20]
-        self.nums_of_cards = [2, 3, 4, 5, 6, 7]
+        self.nums_of_cards = [2, 3, 4, 5, 6]
         for sum in self.desired_sum:
             dict_by_sum = {}
             for num_of_cards in self.nums_of_cards:
@@ -104,7 +104,7 @@ class Player:
             self.matrix[sum] = dict_by_sum
         
         # When we have no data on a certain situation, default to simple strategy of 
-        # hitting until sum is 18
+        # hitting until sum is 17
         self.defaut_strat = 17
 
     """
@@ -140,11 +140,10 @@ class Player:
                 dict_by_sum[num_of_cards] = dict_by_num_of_cards
             sim_num_matrix[hand_sum] = dict_by_sum
 
-        num_of_cards_list = [7, 6, 5, 4, 3, 2]
-        
+        num_of_cards_list = [6, 5, 4, 3, 2]
         # divide up the trials into num_of_cards_list
         for num_of_cards in num_of_cards_list:
-            for _ in range(round(trials * (num_of_cards/27))): #while i < (round((trials/num_of_cards) * 2)): #(round(trials * (num_of_cards/27))):
+            for _ in range(round(trials/5)): #(round(trials/6)): # * ((9-num_of_cards)/27))): #while i < (round((trials/num_of_cards) * 2)): #(round(trials * (num_of_cards/27))):
                 dealerhand = Hand()
                 playerhand = Hand()
                 deck = Deck()
@@ -172,6 +171,7 @@ class Player:
                     # Simulate the dealer's hand
                     while dealerhand.get_value() < 17:
                         dealerhand.add_card(deck.deal_card())
+
                     stand_win, stand_loss = stand_win_percentage = self.do_stand(dealerhand, playerhand)
                     hit_win, hit_loss = self.do_hit(deck, dealerhand, playerhand, percentage_matrix, num_of_cards, face_card_rank)
                     result = (stand_win/(stand_win + stand_loss), hit_win/(hit_win+hit_loss))
@@ -188,7 +188,7 @@ class Player:
                         percentage_matrix[hand_sum][num_of_cards][face_card_rank] = updated_result
                         sim_num_matrix[hand_sum][num_of_cards][face_card_rank] += 1
                     # i += 1
-
+        # print("sim_num_matrix:", sim_num_matrix)
         # higher_ranks = ('A', '7', '8', '9', 'T', 'J', 'Q', 'K')
         # lower_ranks = ('2', '3', '4', '5', '6')
         # print("percentage_matrix:\n", percentage_matrix)
@@ -244,7 +244,7 @@ class Player:
                 return 1, 0
         else:
             # Look up if the scenario already exists in matrix
-            if num_of_cards <= 6:
+            if num_of_cards <= 5:
                 current_strat = percentage_matrix[current_hand_sum][num_of_cards + 1][face_card_rank]
                 if current_strat is None:
                     # Fall back to default strat of hitting until sum reaches 17
@@ -304,7 +304,7 @@ class Player:
         current_value = playerhand.get_value()
 
         # If num of cards is 8 or more, resort to default strategy
-        if num_of_cards >= 8:
+        if num_of_cards >= 7:
             if current_value < self.defaut_strat:
                 return True
             else:
@@ -371,7 +371,8 @@ def main():
     sim_num = 100000
     play_num = 100000
     cpu_time = []
-    for i in range (1):
+    for i in range (10):
+        print("iteration", i)
         player = Player()
 
         # Record the starting CPU time
@@ -394,3 +395,4 @@ if __name__ == "__main__":
 
 # TODO:
 # - Can I increase the win percentage
+# - Check with A and without
