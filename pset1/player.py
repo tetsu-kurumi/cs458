@@ -144,12 +144,10 @@ class Player:
         for num_of_cards in num_of_cards_list:
             # End the simulation if we've reached max_trials specified in the input to the function
             if max_trials <= 0:
-                print("broke")
                 break
             for _ in range(iter_num): 
                 # If we reach the max iteration, stop the simulation
                 if max_trials <= 0:
-                    print("broke")
                     break
                 dealerhand = Hand()
                 playerhand = Hand()
