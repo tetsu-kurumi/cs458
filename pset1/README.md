@@ -3613,7 +3613,7 @@ player hand value: 20
         ace count 3: False
         ace count 4: False
 </pre>
----
+
 ### Percentage Matrix (original appended at the end):
 <pre>
 player hand value: 12
