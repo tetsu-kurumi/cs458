@@ -108,7 +108,7 @@ class Player:
 
     def sim(self, trials: int) -> None:
         # Set iteration number, which will be overrided when the number of simulation reaches int trials (check max_trials)
-        iter_num = round(trials * 0.58)
+        iter_num = round(trials * 0.585)
 
         # Initialize matrix to store win percentages
         percentage_matrix = {}
@@ -209,7 +209,7 @@ class Player:
                     for ace_count in self.ace_counts:
                         percentages = percentage_matrix[sum][num_of_cards][face_card_rank][ace_count]
                         # Default to initial strategy of Stand
-                        if percentages is None: # or sim_num_matrix[sum][num_of_cards][face_card_rank][ace_count] < 3:
+                        if percentages is None or sim_num_matrix[sum][num_of_cards][face_card_rank][ace_count] < 3:
                             dict_by_face_card_rank[ace_count] = False
                         else:
                             stand_win_percentage = percentages[0]
@@ -246,7 +246,7 @@ class Player:
             # Look up if the scenario already exists in matrix
             if num_of_cards <= 5:
                 current_strat = percentage_matrix[current_hand_sum][num_of_cards + 1][face_card_rank][ace_count]
-                if current_strat is None: # or sim_num_matrix[current_hand_sum][num_of_cards + 1][face_card_rank][ace_count]<3:
+                if current_strat is None or sim_num_matrix[current_hand_sum][num_of_cards + 1][face_card_rank][ace_count]<3:
                     # Fall back to default strat of standing
                     while dealerhand.get_value() < 17:
                         dealerhand.add_card(deck.deal_card())
@@ -271,7 +271,7 @@ class Player:
                     return 0, 1
 
     def hitme(self, playerhand: Type[Hand], dealerfacecard: Type[Card]) -> bool:
-        # Calculate the num of cards and number of aces
+        # Calculate the num of cards
         check_hand = playerhand.__str__()
         found_strings = []
         words = check_hand.split()
@@ -285,6 +285,7 @@ class Player:
                     ace_count += 1
         num_of_cards = len(found_strings)
         
+        # If there are 2 or more cards
         current_value = playerhand.get_value()
 
         # If num of cards is 8 or more, return initial strategy of always Stand
@@ -337,3 +338,19 @@ class Player:
         
         # Return the win percentage
         return win/trials
+    
+def main():
+    score = []
+    sim_num = 100000
+    play_num = 100000
+    for i in range (100):
+        print("iteration", i)
+        player = Player()
+        player.sim(sim_num)
+        score.append(player.play(play_num) * 100)
+    print("result for default strat Stand and sim_num", sim_num, "and play_num", play_num)
+    print("scores:", score)
+    print("average:", sum(score)/len(score))
+
+if __name__ == "__main__":
+    main()
