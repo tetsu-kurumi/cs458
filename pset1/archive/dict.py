@@ -33,3 +33,26 @@ with open('output.txt', 'w') as file:
                         file.write(f"        ace count {ace_count}: {boolean_matrix[sum][num_of_cards][face_card_rank][ace_count]}\n")
                    
 file.close()
+
+
+    
+        # with open('output.txt', 'w') as file:
+        #     for sum in self.desired_sum:
+        #             file.write(f"player hand value: {sum}\n")
+        #             for num_of_cards in self.nums_of_cards: 
+        #                 file.write(f"    num of cards: {num_of_cards}\n")
+        #                 for face_card_rank in RANKS:
+        #                     file.write(f"      face card rank: {face_card_rank}\n")
+        #                     file.write(f"        win percentage of stand vs hit for each ace count (0 ~ 4): {percentage_matrix[sum][num_of_cards][face_card_rank]}\n")
+
+
+        #     for sum in self.desired_sum:
+        #             file.write(f"player hand value: {sum}\n")
+        #             for num_of_cards in self.nums_of_cards: 
+        #                 file.write(f"    num of cards: {num_of_cards}\n")
+        #                 for face_card_rank in RANKS:
+        #                     file.write(f"      face card rank: {face_card_rank}\n")
+        #                     for ace_count in self.ace_counts:
+        #                         file.write(f"        ace count {ace_count}: {self.matrix[sum][num_of_cards][face_card_rank][ace_count]}\n")
+        #     file.write(self.matrix)
+        #     file.write(percentage_matrix)

@@ -285,10 +285,10 @@ class Player:
         
         current_value = playerhand.get_value()
 
-        # If num of cards is 8 or more, return initial strategy of always Stand
+        # If num of cards is 7 or more, return initial strategy of always Stand, since it is out of scope of the matrix 
         if num_of_cards >= 7:
             return False
-        # If the current value of the hand is 21 or more, return initial strategy of always Stand
+        # If the current value of the hand is 21 or more, return initial strategy of always Stand, since it is out of scope of the matrix 
         elif current_value >= 21:
             return False
         # Else, lookup strategy in matrix and return
@@ -316,8 +316,8 @@ class Player:
             playerhand.add_card(deck.deal_card())
             playerhand.add_card(deck.deal_card())
 
-            # Deal card to player until hit me returns False
-            while self.hitme(playerhand, dealerfacecard):
+            # Deal card to player until hit me returns False or player busts
+            while playerhand.get_value() < 21 and self.hitme(playerhand, dealerfacecard):
                 playerhand.add_card(deck.deal_card())
             
             # Deal dealer's hand
